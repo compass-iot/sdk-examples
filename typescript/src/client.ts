@@ -2,11 +2,9 @@ import { Service } from "@buf/compassiot_api.connectrpc_es/gateway/v1/gateway_co
 import { createConnectTransport, ConnectTransportOptions } from "@connectrpc/connect-web"
 import { Code, ConnectError, createPromiseClient, PromiseClient, type Interceptor } from "@connectrpc/connect"
 
-const ENDPOINT = "https://api.compassiot.cloud"
-
-function createGatewayClient(secret: string, options?: ConnectTransportOptions): PromiseClient<typeof Service> {
+function createGatewayClient(baseUrl: string, secret: string, options?: ConnectTransportOptions): PromiseClient<typeof Service> {
   // Instantiate at top level for memoisation (optimisation)
-  const noauthTransport = createConnectTransport({ baseUrl: ENDPOINT })
+  const noauthTransport = createConnectTransport({ baseUrl })
   const noauthClient = createPromiseClient(Service, noauthTransport)
 
   // Need a `let` so we can replace the access token for long-lived usage
@@ -52,7 +50,7 @@ function createGatewayClient(secret: string, options?: ConnectTransportOptions):
   }
 
   const transport = createConnectTransport({
-    baseUrl: ENDPOINT,
+    baseUrl,
     interceptors: [createTokenRefreshInterceptor(secret)],
     ...options
   })

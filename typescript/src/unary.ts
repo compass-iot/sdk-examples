@@ -32,7 +32,7 @@ const request = new AggregateByPathRequest({
   }
 })
 
-const client = createGatewayClient(SECRET)
+const client = createGatewayClient("https://api.compassiot.cloud", SECRET)
 
 console.log("Querying AggregateByPath")
 client.aggregateByPath(request).then(response => {
