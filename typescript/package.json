@@ -1,9 +1,11 @@
 {
   "name": "compassiot-ts-examples",
+  "type": "module",
   "version": "1.0.0",
   "description": "Examples to talk to Compass IoT's API",
   "scripts": {
-    "unary": "npx tsx ./src/unary.ts"
+    "unary": "npx tsx ./src/unary.ts",
+    "streaming": "npx tsx ./src/streaming.ts"
   },
   "repository": {
     "type": "git",
