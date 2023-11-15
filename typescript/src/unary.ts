@@ -33,6 +33,7 @@ const request = new AggregateByPathRequest({
 const client = createGatewayClient("https://api.compassiot.cloud", "...insert client secret here...")
 
 console.log("Querying AggregateByPath")
-client.aggregateByPath(request).then(response => {
-  console.log(response.toJsonString({ prettySpaces: 2 }))
-})
+
+const response = await client.aggregateByPath(request)
+
+console.log(response.toJsonString({ prettySpaces: 2 }))
