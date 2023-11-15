@@ -10,7 +10,11 @@ const req = new RealtimeRawPointByGeometryRequest({
 const client = createGatewayClient("https://api.compassiot.cloud", "...insert client secret here...")
 console.log("Connecting to Gateway...")
 
-// Get response lazily every 1 second
+// The only difference between this example & streaming.ts
+// is the usage of `throttle(client..., duration)` to limit
+// the rate of message consumption (e.g. rendering on front-end).
+// Below, we're capping the rate to 1 per second, but you can adjust
+// to say, `100 milliseconds` by passing `{ value: 100, unit: "ms" }`
 for await (const res of throttle(client.realtimeRawPointByGeometry(req), { value: 1, unit: "s" })) {
   console.log(res.toJsonString({ prettySpaces: 2 }))
 }

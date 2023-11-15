@@ -5,7 +5,8 @@
   "description": "Examples to talk to Compass IoT's API",
   "scripts": {
     "unary": "npx tsx ./src/unary.ts",
-    "streaming": "npx tsx ./src/streaming.ts"
+    "streaming": "npx tsx ./src/streaming.ts",
+    "streaming-throttled": "npx tsx ./src/streaming-throttled.ts"
   },
   "repository": {
     "type": "git",
