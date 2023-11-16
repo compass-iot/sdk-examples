@@ -29,8 +29,9 @@ npm install --save \
 ```
 
 3. Modify client secret
-In each of the files `src/unary.ts`, `src/streaming.ts` & `src/streaming-throttled.ts`, and update the `SECRET` variable:
+In each file of `src/unary.ts` & `src/streaming.ts` update the `SECRET` variable:
 ```ts
+// src/unary.ts
 import { AggregateByPathRequest } from "@buf/compassiot_model.bufbuild_es/platform/v1/unary_pb"
 import { DayOfWeek } from "@buf/compassiot_model.bufbuild_es/compass/v1/time_pb"
 
@@ -46,5 +47,4 @@ const SECRET = "...insert client secret here..."
 ```sh
 npm run unary  # src/unary.ts
 npm run streaming  # src/streaming.ts
-npm run streaming-throttled  # src/streaming-throttled.ts
 ```
