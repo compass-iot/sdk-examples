@@ -10,6 +10,8 @@ You'll firstly need the `client_secret` provisioned by Compass IoT to run the ex
 1. Clone this repository
 ```sh
 git clone https://github.com/compass-iot/sdk-examples.git
+
+cd sdk-examples/typescript
 ```
 2. Install dependencies
 ```sh
@@ -26,7 +28,21 @@ npm install --save \
   @connectrpc/connect-web
 ```
 
-3. Run example
+3. Modify client secret
+In each of the files `src/unary.ts`, `src/streaming.ts` & `src/streaming-throttled.ts`, and update the `SECRET` variable:
+```ts
+import { AggregateByPathRequest } from "@buf/compassiot_model.bufbuild_es/platform/v1/unary_pb"
+import { DayOfWeek } from "@buf/compassiot_model.bufbuild_es/compass/v1/time_pb"
+
+import createGatewayClient from "./client"
+
+const ENDPOINT = "https://api.compassiot.cloud"
+
+// Set the following to client secret
+const SECRET = "...insert client secret here..."
+```
+
+4. Run examples
 ```sh
 npm run unary  # src/unary.ts
 npm run streaming  # src/streaming.ts

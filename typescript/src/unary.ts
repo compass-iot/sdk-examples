@@ -3,6 +3,9 @@ import { DayOfWeek } from "@buf/compassiot_model.bufbuild_es/compass/v1/time_pb"
 
 import createGatewayClient from "./client"
 
+const ENDPOINT = "https://api.compassiot.cloud"
+const SECRET = "...insert client secret here..."
+
 const request = new AggregateByPathRequest({
   linestringWkt: "LINESTRING (151.194525 -33.87363, 151.194109 -33.873076, 151.193736 -33.872564, 151.193507 -33.872265, 151.193347 -33.872052, 151.193259 -33.871925, 151.193228 -33.871889)",
 
@@ -30,7 +33,7 @@ const request = new AggregateByPathRequest({
   }
 })
 
-const client = createGatewayClient("https://api.compassiot.cloud", "...insert client secret here...")
+const client = createGatewayClient(ENDPOINT, SECRET)
 
 console.log("Querying AggregateByPath")
 
