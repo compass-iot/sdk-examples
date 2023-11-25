@@ -1,0 +1,25 @@
+{
+  "name": "compassiot-ts-examples",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Examples to talk to Compass IoT's API",
+  "scripts": {
+    "unary": "npx tsx ./src/unary.ts",
+    "streaming": "npx tsx ./src/streaming.ts",
+    "streaming-throttled": "npx tsx ./src/streaming-throttled.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/compass-iot/sdk-examples"
+  },
+  "author": "Dennis Wirya <dennis@compassiot.com.au>",
+  "license": "ISC",
+  "dependencies": {
+    "@buf/compassiot_api.bufbuild_es": "^1.4.2-20231113233204-83f003c51202.1",
+    "@buf/compassiot_api.connectrpc_es": "^1.1.3-20231113233204-83f003c51202.1",
+    "@buf/compassiot_model.bufbuild_es": "^1.4.2-20231113233201-72464a8973cc.1",
+    "@bufbuild/protobuf": "^1.4.2",
+    "@connectrpc/connect": "^1.1.3",
+    "@connectrpc/connect-web": "^1.1.3"
+  }
+}
