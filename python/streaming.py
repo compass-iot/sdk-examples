@@ -6,7 +6,7 @@ from sdk.gateway.v1 import ServiceStub
 from sdk.platform.v1 import RealtimeRawPointByGeometryRequest, StreamEnvironment
 
 
-HOST = "api.compassiot.cloud"
+HOST = "beta.api.compassiot.cloud"
 SECRET = "...INSERT SECRET HERE..."
 
 
