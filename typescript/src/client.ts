@@ -1,10 +1,15 @@
-import { Service } from "@buf/compassiot_api.connectrpc_es/gateway/v1/gateway_connect"
+import { Service } from "@buf/compassiot_api.connectrpc_es/compassiot/gateway/v1/gateway_connect"
 import { createConnectTransport, ConnectTransportOptions } from "@connectrpc/connect-web"
 import { Code, ConnectError, createPromiseClient, PromiseClient, type Interceptor } from "@connectrpc/connect"
 
-function createGatewayClient(baseUrl: string, secret: string, options?: ConnectTransportOptions): PromiseClient<typeof Service> {
+
+const HOST = "https://beta.api.compassiot.cloud"
+const SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
+
+
+function createGatewayClient(options?: ConnectTransportOptions): PromiseClient<typeof Service> {
   // Instantiate at top level for memoisation (optimisation)
-  const noauthTransport = createConnectTransport({ baseUrl })
+  const noauthTransport = createConnectTransport({ baseUrl: HOST })
   const noauthClient = createPromiseClient(Service, noauthTransport)
 
   // Need a `let` so we can replace the access token for long-lived usage
@@ -50,11 +55,13 @@ function createGatewayClient(baseUrl: string, secret: string, options?: ConnectT
   }
 
   const transport = createConnectTransport({
-    baseUrl,
-    interceptors: [createTokenRefreshInterceptor(secret)],
+    baseUrl: HOST,
+    interceptors: [createTokenRefreshInterceptor(SECRET)],
     ...options
   })
   return createPromiseClient(Service, transport)
 }
 
-export default createGatewayClient
+const client = createGatewayClient()
+
+export default client

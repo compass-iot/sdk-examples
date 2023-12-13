@@ -1,50 +1,13 @@
-# Typescript Example
+# Typescript Examples
 
-Connect RPC supports two types of protocol:
-- Unary: traditional request-response model similar to REST APIs
-- Streaming: maintains persistent connection similar to [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API), but much more performant, comparable to [grpc-web](https://grpc.io/docs/platforms/web/basics/).
-
-## Prerequisites
-
-You'll firstly need the `client_secret` provisioned by Compass IoT to run the examples. Then, the next steps are:
-1. Clone this repository
-```sh
-git clone https://github.com/compass-iot/sdk-examples.git
-
-cd sdk-examples/typescript
-```
-2. Install dependencies
-```sh
-npm install  # similar command in yarn & pnpm
-```
-or to install them manually (in another project):
-```sh
-npm install --save \
-  @buf/compassiot_model.bufbuild_es \
-  @buf/compassiot_api.bufbuild_es \
-  @buf/compassiot_api.connectrpc_es \
-  @bufbuild/protobuf \
-  @connectrpc/connect \
-  @connectrpc/connect-web
+1. Install Node modules:
+```bash
+npm install && npm update
 ```
 
-3. Modify client secret
-In each file of `src/unary.ts` & `src/streaming.ts` update the `SECRET` variable:
-```ts
-// src/unary.ts
-import { AggregateByPathRequest } from "@buf/compassiot_model.bufbuild_es/platform/v1/unary_pb"
-import { DayOfWeek } from "@buf/compassiot_model.bufbuild_es/compass/v1/time_pb"
+2. Set your API key in `src/client.ts` on line `7`
 
-import createGatewayClient from "./client"
-
-const ENDPOINT = "https://api.compassiot.cloud"
-
-// Set the following to client secret
-const SECRET = "...insert client secret here..."
-```
-
-4. Run examples
-```sh
-npm run unary  # src/unary.ts
-npm run streaming  # src/streaming.ts
+3. To run any of the examples, we encourage using Typescript server to avoid TS transpilation issues. We recommend using `tsx` as it works for us, so to run, for instance, `src/platform_streaming.ts`, do:
+```bash
+npx tsx ./src/platform_streaming.ts
 ```
