@@ -3,11 +3,6 @@
   "type": "module",
   "version": "1.0.0",
   "description": "Examples to talk to Compass IoT's API",
-  "scripts": {
-    "unary": "npx tsx ./src/unary.ts",
-    "streaming": "npx tsx ./src/streaming.ts",
-    "streaming-throttled": "npx tsx ./src/streaming-throttled.ts"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/compass-iot/sdk-examples"
