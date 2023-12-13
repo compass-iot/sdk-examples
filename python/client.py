@@ -57,7 +57,7 @@ class UnaryRestInterceptor(UnaryUnaryClientInterceptor):
 				headers[k] = v
 
 		# Make request & deserialize it
-		response = requests.post(url, data=request.SerializeToString(True), headers=headers, auth=call_details.credentials)
+		response = requests.post(url, data=request.SerializeToString(True), headers=headers)
 		response.raise_for_status()
 
 		# Wrap into future
