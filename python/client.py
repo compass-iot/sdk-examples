@@ -1,10 +1,9 @@
 import asyncio
 import inspect
 import requests
-from collections import abc
 from typing import Any, Callable
 
-from grpc import ClientCallDetails, RpcError, intercept_channel, secure_channel, ssl_channel_credentials
+from grpc import ClientCallDetails, RpcError, UnaryUnaryClientInterceptor, intercept_channel, secure_channel, ssl_channel_credentials
 from grpc_interceptor.client import ClientInterceptor, ClientCallDetails
 
 from compassiot.gateway.v1.gateway_pb2 import AuthenticateRequest
@@ -24,7 +23,7 @@ def create_gateway_client() -> ServiceStub:
 	return ServiceStub(channel)
 
 
-class UnaryRestInterceptor(ClientInterceptor):
+class UnaryRestInterceptor(UnaryUnaryClientInterceptor):
 	"""
 	Shim to convert unary gRPC calls to pure REST, due to several suspected regressions in
 	core gRPC library:
@@ -49,7 +48,7 @@ class UnaryRestInterceptor(ClientInterceptor):
 		self.deserializer_map = self._build_deserializer_map()
 
 	def _call_rest(self, request: Any, call_details: ClientCallDetails):
-		url = "https://%s/%s" % (self.host, call_details.method)
+		url = "https://%s/%s" % (self.host, call_details.method.strip("/"))
 
 		# Copy headers
 		headers = self._HTTP_HEADERS.copy()
@@ -67,14 +66,9 @@ class UnaryRestInterceptor(ClientInterceptor):
 		future = asyncio.get_event_loop().create_future()
 		future.set_result(deserializer(response.content))
 		return future
-			
 
-	def intercept(self, method: Callable[..., Any], request_or_iterator: Any, call_details: ClientCallDetails):
-		# Check if streaming: if yes, avoid proxy
-		if isinstance(request_or_iterator, abc.Iterator):
-			return method(request_or_iterator, call_details)
-		# Else, make REST request
-		return self._call_rest(request_or_iterator, call_details)
+	def intercept_unary_unary(self, next, call_details: ClientCallDetails, request: Any):
+		return self._call_rest(request, call_details)	
 
 
 class AccessTokenInterceptor(ClientInterceptor):
