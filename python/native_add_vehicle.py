@@ -15,7 +15,7 @@ def main():
 
     response = client.NativeAddVehicle(request)
 
-    print(response.message, response.add_vehicle_status)
+    print(response)
 
      
 if __name__ == "__main__":

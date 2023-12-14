@@ -11,7 +11,7 @@ def main():
 
     response = client.NativeGetLatestPoint(request)
 
-    print(response.event)
+    print(response)
 
      
 if __name__ == "__main__":

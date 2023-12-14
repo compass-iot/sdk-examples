@@ -28,13 +28,13 @@ def main():
 			    time.DayOfWeek.SATURDAY, 
 			    time.DayOfWeek.SUNDAY
             ],
-            hour_of_day=[i for i in range(24)]
+            hour_of_day=[i for i in range(24)]  # 0 to 23
         )
     )
 
     response = client.IntersectionAnalysis(request)
 
-    print(response.level_of_service, response.intersection_metrics)
+    print(response)
 
 
 if __name__ == "__main__":

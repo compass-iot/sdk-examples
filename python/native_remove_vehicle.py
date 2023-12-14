@@ -9,6 +9,7 @@ def main():
         vins=[]
     )
 
+    # Returns empty, check using NativeGetVehicles
     client.NativeRemoveVehicle(request)
 
      

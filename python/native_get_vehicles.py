@@ -6,7 +6,7 @@ def main():
     client = create_gateway_client()
     request = Empty()
     response = client.NativeGetVehicles(request)
-    print(response.provider_get)
+    print(response)
 
      
 if __name__ == "__main__":

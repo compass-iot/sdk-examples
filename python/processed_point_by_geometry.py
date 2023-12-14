@@ -19,16 +19,11 @@ def main():
                 month=10,
                 year=2023
             ),
-            hour_of_day=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
             day_of_week=[
                 time.DayOfWeek.SATURDAY,
-                time.DayOfWeek.SUNDAY,
-                time.DayOfWeek.MONDAY,
-                time.DayOfWeek.TUESDAY,
-                time.DayOfWeek.WEDNESDAY,
-                time.DayOfWeek.THURSDAY,
-                time.DayOfWeek.FRIDAY,
-            ]
+                time.DayOfWeek.SUNDAY
+            ],
+            hour_of_day=[i for i in range(24)]  # 0 to 23
         ),
         filters=[streaming.RawRequestFilter.UNSPECIFIED]
     )

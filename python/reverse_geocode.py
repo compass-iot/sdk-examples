@@ -11,7 +11,7 @@ def main():
 
     response = client.ReverseGeocode(request)
 
-    print(response.name)
+    print(response)
 
 
 if __name__ == "__main__":

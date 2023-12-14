@@ -34,18 +34,13 @@ def main():
 			    time.DayOfWeek.SATURDAY, 
 			    time.DayOfWeek.SUNDAY
             ],
-            hour_of_day=[i for i in range(24)]
+            hour_of_day=[i for i in range(24)]  # 0 to 23
         )
     )
 
     response = client.OriginDestination(request)
 
-    print(
-        response.trip_count_percentile,
-        response.selection_permutation,
-        response.edges,
-        response.inputs
-    )
+    print(response)
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ def main():
         )
     )
 
+    # Returns empty, check using NativeGetLatestPoint
     client.NativeUpdateVehicle(request)
 
      

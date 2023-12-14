@@ -12,6 +12,7 @@ def main():
         )
     )
 
+    # Returns empty, check using NativeGetLatestPoint
     client.NativeIssueAction(request)
 
      

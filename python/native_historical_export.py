@@ -26,13 +26,13 @@ def main():
                 time.DayOfWeek.FRIDAY,
                 time.DayOfWeek.SUNDAY
             ],
-            hour_of_day=[i for i in range(24)]
+            hour_of_day=[i for i in range(24)]  # 0 to 23
         )
     )
 
     response = client.NativeHistoricalExport(request)
 
-    print(response.csv_links)
+    print(response)
 
      
 if __name__ == "__main__":
