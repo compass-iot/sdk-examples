@@ -3,6 +3,7 @@ import inspect
 import requests
 from typing import Any, Callable
 
+import grpc
 from grpc import ClientCallDetails, RpcError, UnaryUnaryClientInterceptor, intercept_channel, secure_channel, ssl_channel_credentials
 from grpc_interceptor.client import ClientInterceptor, ClientCallDetails
 
@@ -42,6 +43,40 @@ class UnaryRestInterceptor(UnaryUnaryClientInterceptor):
 			for (k, v) in stub_method_tuples:
 				map[k] = v._response_deserializer
 			return map
+		
+	@staticmethod
+	def _cast_grpc_error(response: requests.Response):
+		has_error = False
+		error = RpcError()
+		if response.status_code >= 200 and response.status_code < 300:
+			has_error = False
+		if response.status_code == 400:
+			error.code = lambda: grpc.StatusCode.INVALID_ARGUMENT
+			has_error = True
+		if response.status_code == 401:
+			error.code = lambda: grpc.StatusCode.UNAUTHENTICATED
+			has_error = True
+		if response.status_code == 403:
+			error.code = lambda: grpc.StatusCode.PERMISSION_DENIED
+			has_error = True
+		if response.status_code == 404:
+			error.code = lambda: grpc.StatusCode.NOT_FOUND
+			has_error = True
+		if response.status_code == 412:
+			error.code = lambda: grpc.StatusCode.FAILED_PRECONDITION
+			has_error = True
+		if response.status_code == 429:
+			error.code = lambda: grpc.StatusCode.RESOURCE_EXHAUSTED
+			has_error = True
+		if response.status_code >= 500:
+			error.code = lambda: grpc.StatusCode.INTERNAL
+			has_error = True
+		
+		if has_error is True:
+			error.details = lambda: response.content.decode()
+			return error
+		else:
+			return None
 
 	def __init__(self, host: str):
 		self.host = host
@@ -56,15 +91,18 @@ class UnaryRestInterceptor(UnaryUnaryClientInterceptor):
 			for (k, v) in call_details.metadata:
 				headers[k] = v
 
+		# Create future
+		future = asyncio.get_event_loop().create_future()
+
 		# Make request & deserialize it
 		response = requests.post(url, data=request.SerializeToString(True), headers=headers)
-		response.raise_for_status()
-
-		# Wrap into future
-		rpc = call_details.method.split("/")[-1]
-		deserializer = self.deserializer_map[rpc]
-		future = asyncio.get_event_loop().create_future()
-		future.set_result(deserializer(response.content))
+		error = self._cast_grpc_error(response)
+		if error is not None:
+			future.set_exception(error)
+		else:
+			rpc = call_details.method.split("/")[-1]
+			deserializer = self.deserializer_map[rpc]
+			future.set_result(deserializer(response.content))
 		return future
 
 	def intercept_unary_unary(self, next, call_details: ClientCallDetails, request: Any):
