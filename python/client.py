@@ -113,12 +113,15 @@ class AccessTokenInterceptor(ClientInterceptor):
 	def __init__(self, host: str, secret: str) -> None:
 		self.host = host
 		self.secret = secret
+		self.access_token = self._get_access_token(host, secret)
 
+	@staticmethod
+	def _get_access_token(host: str, secret: str) -> str:
 		interceptors = [UnaryRestInterceptor(host)]
 		with intercept_channel(secure_channel(host, ssl_channel_credentials()), *interceptors) as channel:
 			service = ServiceStub(channel)
 			response = service.Authenticate(AuthenticateRequest(token=secret))
-			self.access_token = response.access_token			
+			return response.access_token
 
 	@staticmethod
 	def _create_details_with_auth(call_details: ClientCallDetails, access_token: str) -> ClientCallDetails:
@@ -135,4 +138,8 @@ class AccessTokenInterceptor(ClientInterceptor):
 		try:
 			return method(request_or_iterator, self._create_details_with_auth(call_details, self.access_token))
 		except RpcError as error:
-			print("Error: ", error)
+			if error.code == grpc.StatusCode.UNAUTHENTICATED:
+				self.access_token = self._get_access_token(self.host, self.secret)
+				return method(request_or_iterator, self._create_details_with_auth(call_details, self.access_token))
+			else:
+				raise error
