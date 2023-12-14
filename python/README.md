@@ -21,3 +21,5 @@ python3 -m pip install compassiot-api-community-nipunn1313-mypy-grpc compassiot-
 ```bash
 python3 platform_streaming.py
 ```
+
+Note: Pls find our API doc [here](https://beta.api.compassiot.cloud/docs). The proto files for our APIs, can be found [here](https://buf.build/compassiot/api).
