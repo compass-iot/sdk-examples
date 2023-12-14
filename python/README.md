@@ -15,11 +15,11 @@ python3 -m pip install compassiot-api-grpc-python compassiot-api-protocolbuffers
 python3 -m pip install compassiot-api-community-nipunn1313-mypy-grpc compassiot-api-community-nipunn1313-mypy --extra-index-url https://buf.build/gen/python
 ```
 
-4. Set your API key in `client.py` on line `14`
+4. Set your API key in `client.py` on line `15`
 
-5. Run any of the examples, e.g. to run `platform_streaming.py`:
+5. Run any of the examples, e.g. to run `aggregate_by_path.py`:
 ```bash
-python3 platform_streaming.py
+python3 aggregate_by_path.py
 ```
 
 Note: Pls find our API doc [here](https://beta.api.compassiot.cloud/docs). The proto files for our APIs, can be found [here](https://buf.build/compassiot/api).

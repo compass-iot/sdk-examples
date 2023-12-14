@@ -4,7 +4,7 @@ import requests
 from typing import Any, Callable
 
 import grpc
-from grpc import ClientCallDetails, RpcError, UnaryUnaryClientInterceptor, intercept_channel, secure_channel, ssl_channel_credentials
+from grpc import ClientCallDetails, RpcError, intercept_channel, secure_channel, ssl_channel_credentials
 from grpc_interceptor.client import ClientInterceptor, ClientCallDetails
 
 from compassiot.gateway.v1.gateway_pb2 import AuthenticateRequest
@@ -24,7 +24,7 @@ def create_gateway_client() -> ServiceStub:
 	return ServiceStub(channel)
 
 
-class UnaryRestInterceptor(UnaryUnaryClientInterceptor):
+class UnaryRestInterceptor(grpc.UnaryUnaryClientInterceptor):
 	"""
 	Shim to convert unary gRPC calls to pure REST, due to several suspected regressions in
 	core gRPC library:
@@ -104,9 +104,9 @@ class UnaryRestInterceptor(UnaryUnaryClientInterceptor):
 			deserializer = self.deserializer_map[rpc]
 			future.set_result(deserializer(response.content))
 		return future
-
+	
 	def intercept_unary_unary(self, next, call_details: ClientCallDetails, request: Any):
-		return self._call_rest(request, call_details)	
+		return self._call_rest(request, call_details)
 
 
 class AccessTokenInterceptor(ClientInterceptor):
