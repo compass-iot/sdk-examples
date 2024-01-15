@@ -11,7 +11,7 @@ from compassiot.gateway.v1.gateway_pb2 import AuthenticateRequest
 from compassiot.gateway.v1.gateway_pb2_grpc import ServiceStub
 
 
-HOST = "beta.api.compassiot.cloud"
+HOST = "api.compassiot.cloud"
 SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
 
 

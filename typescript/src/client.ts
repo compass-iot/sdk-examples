@@ -3,7 +3,7 @@ import { createConnectTransport, ConnectTransportOptions } from "@connectrpc/con
 import { Code, ConnectError, createPromiseClient, PromiseClient, type Interceptor } from "@connectrpc/connect"
 
 
-const HOST = "https://beta.api.compassiot.cloud"
+const HOST = "https://api.compassiot.cloud"
 const SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
 
 
