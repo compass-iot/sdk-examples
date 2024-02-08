@@ -60,7 +60,7 @@ import { createNodeClient, retryStream } from "./client"
 
 const client = createNodeClient()
 
-const stream = () => client.realtimeRawPointByGeometry(request)
+const stream = () => client.realtimeRawPointByVins(request)
 
 for await (const response of retryStream(stream)) {
     // Do something
