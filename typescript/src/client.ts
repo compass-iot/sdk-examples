@@ -1,67 +1,86 @@
 import { Service } from "@buf/compassiot_api.connectrpc_es/compassiot/gateway/v1/gateway_connect"
-import { createConnectTransport, ConnectTransportOptions } from "@connectrpc/connect-web"
+import { createConnectTransport as createNodeTransport, ConnectTransportOptions as NodeTransportOptions } from "@connectrpc/connect-node"
+import { createConnectTransport as createWebTransport, ConnectTransportOptions as WebTransportOptions } from "@connectrpc/connect-web"
 import { Code, ConnectError, createPromiseClient, PromiseClient, type Interceptor } from "@connectrpc/connect"
-
 
 const HOST = "https://api.compassiot.cloud"
 const SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
+const CLIENT_TIMEOUT_MS = 1000 * 60 * 4.5 //  must be lower than server timeout of 5 mins from GCP
 
-
-function createGatewayClient(options?: ConnectTransportOptions): PromiseClient<typeof Service> {
-  // Instantiate at top level for memoisation (optimisation)
-  const noauthTransport = createConnectTransport({ baseUrl: HOST })
-  const noauthClient = createPromiseClient(Service, noauthTransport)
-
+function createAuthInterceptor(secret: string, client: PromiseClient<typeof Service>): Interceptor {
   // Need a `let` so we can replace the access token for long-lived usage
-  let accessToken = ""
+  let at = ""
 
-  function createTokenRefreshInterceptor(secret: string): Interceptor {
-    return (next) => async req => {
-      // Try making request to see if we're still authenticated
-      try {
-        // Initialise access token if it's empty
-        if (accessToken === "") {
-          const { accessToken: newAccessToken } = await noauthClient.authenticate({ token: secret })
-          accessToken = newAccessToken
-        }
-        req.header.set("Authorization", `Bearer ${accessToken}`)
-        return await next(req)
+  return next => async req => {
+    try {
+      if (at === "") {
+        const { accessToken } = await client.authenticate({ token: secret })
+        at = accessToken
       }
-      catch (err) {
-        // Try wrapping as ConnectError to get more context
-        if (err instanceof ConnectError) {
-          if (err.code === Code.Unauthenticated) {
-            // Fetch new access token & update the old one
-            const { accessToken: newAccessToken } = await noauthClient.authenticate({ token: secret })
-            accessToken = newAccessToken
-
-            // Retry the request
-            req.header.set("Authorization", `Bearer ${accessToken}`)
-            return await next(req)
-          }
-          else {
-            // Print error, but here we have more context as it's wrapped in ConnectError
-            console.error(err.code, err.cause)
-
-            // Or if you prefer stack trace
-            console.error(err.stack)
-          }
-        } else {
-          console.error(err)
-        }
-      }
+      req.header.set("Authorization", `Bearer ${at}`)
       return await next(req)
     }
+    catch (err) {
+      if (err instanceof ConnectError) {
+        if (err.code === Code.Unauthenticated) {
+          const { accessToken } = await client.authenticate({ token: secret })
+          at = accessToken
+          req.header.set("Authorization", `Bearer ${at}`)
+          return await next(req)
+        }
+      }
+      throw err
+    }
   }
+}
 
-  const transport = createConnectTransport({
+function createNodeClient(options?: Omit<NodeTransportOptions, "baseUrl" | "httpVersion">): PromiseClient<typeof Service> {
+  const noauthClient = createPromiseClient(Service, createNodeTransport({
     baseUrl: HOST,
-    interceptors: [createTokenRefreshInterceptor(SECRET)],
-    ...options
+    httpVersion: "1.1",
+  }))
+  const transport = createNodeTransport({
+    baseUrl: HOST,
+    httpVersion: "2",
+    interceptors: [createAuthInterceptor(SECRET, noauthClient)],
+    defaultTimeoutMs: CLIENT_TIMEOUT_MS,
+    ...options,
   })
   return createPromiseClient(Service, transport)
 }
 
-const client = createGatewayClient()
+function createWebClient(options?: Omit<WebTransportOptions, "baseUrl">): PromiseClient<typeof Service> {
+  const noauthClient = createPromiseClient(Service, createWebTransport({
+    baseUrl: HOST,
+  }))
+  const transport = createWebTransport({
+    baseUrl: HOST,
+    interceptors: [createAuthInterceptor(SECRET, noauthClient)],
+    defaultTimeoutMs: CLIENT_TIMEOUT_MS,
+    ...options,
+  })
+  return createPromiseClient(Service, transport)
+}
 
-export default client
+async function* retryStream<T>(stream: () => AsyncIterable<T>): AsyncIterable<T> {
+  let iterable = stream()
+  for (; ;) {
+    try {
+      for await (const r of iterable) {
+        yield r
+      }
+    } catch (err) {
+      switch (ConnectError.from(err).code) {
+        case Code.Unavailable:
+        case Code.DeadlineExceeded:
+          console.log(`DeadlineExceeded, retrying stream`)
+          iterable = stream()
+          continue
+        default:
+          throw err
+      }
+    }
+  }
+}
+
+export { createNodeClient, createWebClient, retryStream }

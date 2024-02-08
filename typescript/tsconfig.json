@@ -5,13 +5,13 @@
         "lib": [
             "ES2022",
             "DOM",
-            "DOM.Iterable"
+            "DOM.Iterable" // for async iterables
         ],
         "module": "ES2022",
         "skipLibCheck": true,
         "esModuleInterop": true,
         /* Bundler mode */
-        "moduleResolution": "Node",
+        "moduleResolution": "Bundler",
         "allowImportingTsExtensions": true,
         "isolatedModules": true,
         "noEmit": true,

@@ -1,6 +1,8 @@
 import * as native from "@buf/compassiot_api.bufbuild_es/compassiot/native/v1/native_pb"
 
-import client from "./client"
+import { createNodeClient } from "./client"
+
+const client = createNodeClient()
 
 const request = new native.AddVehicleRequest({
   providerAuth: new native.AuthRequest({
