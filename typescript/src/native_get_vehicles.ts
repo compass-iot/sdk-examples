@@ -1,6 +1,8 @@
 import { Empty } from "@bufbuild/protobuf"
 
-import client from "./client"
+import { createNodeClient } from "./client"
+
+const client = createNodeClient()
 
 const request = new Empty()
 

@@ -1,7 +1,9 @@
 import * as time from "@buf/compassiot_model.bufbuild_es/compassiot/compass/v1/time_pb"
 import * as native from "@buf/compassiot_api.bufbuild_es/compassiot/native/v1/native_pb"
 
-import client from "./client"
+import { createNodeClient } from "./client"
+
+const client = createNodeClient()
 
 const request = new native.HistoricalExportRequest({
   filterVins: [],

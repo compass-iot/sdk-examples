@@ -1,7 +1,9 @@
 import * as time from "@buf/compassiot_model.bufbuild_es/compassiot/compass/v1/time_pb"
 import * as unary from "@buf/compassiot_api.bufbuild_es/compassiot/platform/v1/unary_pb"
 
-import client from "./client"
+import { createNodeClient } from "./client"
+
+const client = createNodeClient()
 
 const request = new unary.OriginDestinationRequest({
   selection: [
@@ -38,4 +40,3 @@ const request = new unary.OriginDestinationRequest({
 const response = await client.originDestination(request)
 
 console.log(response.toJsonString({ prettySpaces: 2 }))
-
