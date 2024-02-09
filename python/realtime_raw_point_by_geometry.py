@@ -1,4 +1,4 @@
-from client import create_gateway_client
+from client import create_gateway_client, retry_stream, CLIENT_TIMEOUT_SEC
 import compassiot.platform.v1.streaming_pb2 as streaming
 
 
@@ -10,7 +10,7 @@ def main():
         stream_env= streaming.StreamEnvironment.DEV
     )
     
-    for response in client.RealtimeRawPointByGeometry(request):
+    for response in retry_stream(lambda: client.RealtimeRawPointByGeometry(request, timeout=CLIENT_TIMEOUT_SEC)):
         print(response)
 
 

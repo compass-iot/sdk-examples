@@ -52,9 +52,9 @@ Use `connect-web` when you are building an app running in the browser (e.g. Reac
 
 ### Long-lived Streaming
 
-The HTTP/2 protocol was designed to buffer payload too large to be sent over HTTP/1.1 via streaming. Hence HTTP timeouts still exist in the streaming world. RPCs which may have long periods of inactivity, such as `RealtimeRawPointByVins` suffers from [HTTP 504](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504) timeout if there is no data sent within 5 minutes. Note that since `RealtimeRawPointByGeometry` aggregates vehicles, it is more frequent in sending data, and hence suffers less from <strong>HTTP 504</strong> timeout.
+The HTTP/2 protocol was designed to buffer payload too large to be sent over HTTP/1.1. Hence HTTP timeouts still exist in the streaming world. RPCs which may have long periods of inactivity, such as `RealtimeRawPointByVins`, suffer from [HTTP 504](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504) timeout if there are no data sent within 5 minutes. Note that since `RealtimeRawPointByGeometry` aggregates vehicles, it is more frequent in sending data, and hence suffers less from <strong>HTTP 504</strong> timeout.
 
-To support such use case, we expose a utility function from `client.ts`:
+To support such use case, we expose a utility function from `client.ts` to create a new stream whenever it gets disconnected due to no data::
 ```TS
 import { createNodeClient, retryStream } from "./client"
 
@@ -66,5 +66,3 @@ for await (const response of retryStream(stream)) {
     // Do something
 }
 ```
-
-`retryStream` accepts a lambda which returns an `AsyncIterable`. Under the hood, the stream gets wrapped in a `try-catch` statement such that when it gets disconnected due to no data, it will create a new stream and allow clients to continue consuming the stream.

@@ -71,7 +71,6 @@ async function* retryStream<T>(stream: () => AsyncIterable<T>): AsyncIterable<T>
       }
     } catch (err) {
       switch (ConnectError.from(err).code) {
-        case Code.Unavailable:
         case Code.DeadlineExceeded:
           console.log(`DeadlineExceeded, retrying stream`)
           iterable = stream()
