@@ -176,10 +176,9 @@ def retry_stream(stream: Callable[[None], AsyncGenerator]) -> AsyncGenerator:
 		try:
 			yield from generator
 		except RpcError as error:
-			match error.code():
-				case grpc.StatusCode.DEADLINE_EXCEEDED:
+			if error.code() is grpc.StatusCode.DEADLINE_EXCEEDED:
 					print("DeadlineExceeded, retrying stream")
 					generator = stream()
 					continue
-				case _:
+			else:
 					raise error
