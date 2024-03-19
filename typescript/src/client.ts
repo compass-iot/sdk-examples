@@ -5,7 +5,7 @@ import { Code, ConnectError, createPromiseClient, PromiseClient, type Intercepto
 
 const HOST = "https://api.compassiot.cloud"
 const SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
-const CLIENT_TIMEOUT_MS = 1000 * 60 * 4.5 //  must be lower than server timeout of 5 mins from GCP
+const TIMEOUT_MS = 1000 * 60 * 25  // used by retryStream
 
 function createAuthInterceptor(secret: string, client: PromiseClient<typeof Service>): Interceptor {
   // Need a `let` so we can replace the access token for long-lived usage
@@ -43,7 +43,6 @@ function createNodeClient(options?: Omit<NodeTransportOptions, "baseUrl" | "http
     baseUrl: HOST,
     httpVersion: "2",
     interceptors: [createAuthInterceptor(SECRET, noauthClient)],
-    defaultTimeoutMs: CLIENT_TIMEOUT_MS,
     ...options,
   })
   return createPromiseClient(Service, transport)
@@ -56,7 +55,6 @@ function createWebClient(options?: Omit<WebTransportOptions, "baseUrl">): Promis
   const transport = createWebTransport({
     baseUrl: HOST,
     interceptors: [createAuthInterceptor(SECRET, noauthClient)],
-    defaultTimeoutMs: CLIENT_TIMEOUT_MS,
     ...options,
   })
   return createPromiseClient(Service, transport)
@@ -82,4 +80,4 @@ async function* retryStream<T>(stream: () => AsyncIterable<T>): AsyncIterable<T>
   }
 }
 
-export { createNodeClient, createWebClient, retryStream }
+export { createNodeClient, createWebClient, retryStream, TIMEOUT_MS }

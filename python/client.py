@@ -14,14 +14,13 @@ from compassiot.gateway.v1.gateway_pb2_grpc import ServiceStub
 
 HOST = "api.compassiot.cloud"
 SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
-CLIENT_TIMEOUT_SEC = 60 * 4.5 #  4.5 mins, must be lower than server timeout of 5 mins from GCP
+TIMEOUT_SEC = 60 * 25  # used by retryStream
 
 
 def create_gateway_client() -> ServiceStub:
 	# UnaryRestInterceptor must be last as it's the layer which makes the API call,
 	# unlike AccessTokenInterceptor which just populates the header
 	interceptors = [
-		DefaultTimeoutInterceptor(CLIENT_TIMEOUT_SEC), 
 		AccessTokenInterceptor(HOST, SECRET), 
 		UnaryRestInterceptor(HOST)
 	]
@@ -149,25 +148,6 @@ class AccessTokenInterceptor(ClientInterceptor):
 				return method(request_or_iterator, self._create_details_with_auth(call_details, self.access_token))
 			else:
 				raise error
-
-
-class DefaultTimeoutInterceptor(ClientInterceptor):
-	def __init__(self, timeout_seconds: float) -> None:
-		self.timeout = timeout_seconds
-
-	@staticmethod
-	def _create_details_with_timeout(call_details: ClientCallDetails, timeout: float) -> ClientCallDetails:
-		return ClientCallDetails(
-			call_details.method,
-			timeout,
-			call_details.metadata,
-			call_details.credentials,
-			call_details.wait_for_ready,
-			call_details.compression,
-		)
-	
-	def intercept(self, method: Callable[..., Any], request_or_iterator: Any, call_details: ClientCallDetails):
-		return method(request_or_iterator, self._create_details_with_timeout(call_details, self.timeout))
 
 
 def retry_stream(stream: Callable[[None], AsyncGenerator]) -> AsyncGenerator:

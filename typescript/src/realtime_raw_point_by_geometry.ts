@@ -1,6 +1,6 @@
 import * as streaming from "@buf/compassiot_api.bufbuild_es/compassiot/platform/v1/streaming_pb"
 
-import { createNodeClient, retryStream } from "./client"
+import { TIMEOUT_MS, createNodeClient, retryStream } from "./client"
 
 const client = createNodeClient()
 
@@ -9,6 +9,6 @@ const request = new streaming.RealtimeRawPointByGeometryRequest({
   streamEnv: streaming.StreamEnvironment.DEV
 })
 
-for await (const response of retryStream(() => client.realtimeRawPointByGeometry(request))) {
+for await (const response of retryStream(() => client.realtimeRawPointByGeometry(request, { timeoutMs: TIMEOUT_MS }))) {
   console.log(response.toJsonString({ prettySpaces: 2 }))
 }
