@@ -4,17 +4,12 @@
 
 1. Install the required modules:
 ```bash
-python3 -m pip install compassiot-api-grpc-python compassiot-api-protocolbuffers-python requests grpc_interceptor --extra-index-url https://buf.build/gen/python
+pip install -r requirements.txt --extra-index-url https://buf.build/gen/python
 ```
 
-2. (Optional) Install strong typing for Compass IoT modules:
-```bash
-python3 -m pip install compassiot-api-community-nipunn1313-mypy-grpc compassiot-api-community-nipunn1313-mypy --extra-index-url https://buf.build/gen/python
-```
+2. Set your API key in `client.py` on line `16`
 
-3. Set your API key in `client.py` on line `16`
-
-4. Run any of the examples, e.g. to run `aggregate_by_path.py`:
+3. Run any of the examples, e.g. to run `aggregate_by_path.py`:
 ```bash
 python3 aggregate_by_path.py
 ```

@@ -1,0 +1,13 @@
+protobuf>=4.25.3
+types-protobuf>=4.24.0.20240311
+requests>=2.31.0
+grpcio>=1.60.1
+grpc-interceptor>=0.15.4
+compassiot_api_community_nipunn1313_mypy>=3.5.0.3.20240305012523+f122070980ef
+compassiot_api_community_nipunn1313_mypy_grpc>=3.5.0.3.20240305012523+f122070980ef
+compassiot_api_grpc_python>=1.62.1.1.20240305012523+f122070980ef
+compassiot_api_protocolbuffers_python>=25.3.0.1.20240305012523+f122070980ef
+compassiot_model_community_nipunn1313_mypy>=3.5.0.3.20240227060656+5395ae81697d
+compassiot_model_community_nipunn1313_mypy_grpc>=3.5.0.3.20240227060656+5395ae81697d
+compassiot_model_grpc_python>=1.62.1.1.20240227060656+5395ae81697d
+compassiot_model_protocolbuffers_python>=25.3.0.1.20240227060656+5395ae81697d
