@@ -43,6 +43,7 @@ async function* paginateProcessedPoint(client: Client, req: streaming.ProcessedP
           throw err
       }
     }
+    break
   }
 }
 
