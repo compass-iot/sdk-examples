@@ -1,6 +1,25 @@
 from client import create_gateway_client
+import grpc
+import compassiot.gateway.v1.gateway_pb2_grpc as gateway
 import compassiot.compass.v1.time_pb2 as time
 import compassiot.platform.v1.streaming_pb2 as streaming
+
+
+def paginate_processed_point(client: gateway.ServiceStub, req: streaming.ProcessedPointByGeometryRequest):
+    stream = client.ProcessedPointByGeometry(req)
+    while True:
+        try:
+            for response in stream:
+                req.last_received_timestamp.CopyFrom(response.timestamp)
+                yield response
+        except grpc.RpcError as e:
+            if e.code() == grpc.StatusCode.DEADLINE_EXCEEDED:
+                print("DeadlineExceed, retrying")
+                stream = client.ProcessedPointByGeometry(req)
+                continue
+            else:
+                raise e
+        break
 
 
 def main():
@@ -28,7 +47,7 @@ def main():
         filters=[streaming.RawRequestFilter.UNSPECIFIED]
     )
 
-    for response in client.ProcessedPointByGeometry(request):
+    for response in paginate_processed_point(client, request):
         print(response)
 
 
