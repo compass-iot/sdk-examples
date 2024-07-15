@@ -10,12 +10,12 @@
   "author": "Dennis Wirya <dennis@compassiot.com.au>",
   "license": "ISC",
   "dependencies": {
-    "@buf/compassiot_api.bufbuild_es": "^1.8.0-20240313234042-fcab4edb1764.1",
-    "@buf/compassiot_api.connectrpc_es": "^1.1.3-20231113233204-83f003c51202.1",
-    "@buf/compassiot_model.bufbuild_es": "^1.4.2-20231113233201-72464a8973cc.1",
-    "@bufbuild/protobuf": "^1.7.2",
-    "@connectrpc/connect": "^1.3.0",
-    "@connectrpc/connect-node": "^1.3.0",
-    "@connectrpc/connect-web": "^1.3.0"
+    "@buf/compassiot_api.bufbuild_es": "^1.10.0-00000000000000-7ee5c8a0c221.1",
+    "@buf/compassiot_api.connectrpc_es": "^1.4.0-00000000000000-7ee5c8a0c221.3",
+    "@buf/compassiot_model.bufbuild_es": "^1.10.0-00000000000000-99526100ff57.1",
+    "@bufbuild/protobuf": "^1.10.0",
+    "@connectrpc/connect": "^1.4.0",
+    "@connectrpc/connect-node": "^1.4.0",
+    "@connectrpc/connect-web": "^1.4.0"
   }
 }
