@@ -1,4 +1,5 @@
-from client import create_gateway_client
+from client import create_gateway_client, get_enum_str
+
 import grpc
 import compassiot.gateway.v1.gateway_pb2_grpc as gateway
 import compassiot.compass.v1.time_pb2 as time
@@ -48,6 +49,8 @@ def main():
     )
 
     for response in paginate_processed_point(client, request):
+        ## helper to print enum objects
+        # print("Vehicle Type:", get_enum_str(response, streaming.ProcessedPoint.VEHICLE_TYPE_FIELD_NUMBER, response.vehicle_type))
         print(response)
 
 

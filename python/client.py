@@ -162,3 +162,10 @@ def retry_stream(stream: Callable[[None], AsyncGenerator]) -> AsyncGenerator:
 					continue
 			else:
 					raise error
+
+
+def get_enum_str(response, descriptor_field_number, enum_value):
+	enum_obj = response.DESCRIPTOR.fields_by_number[descriptor_field_number].enum_type
+	if enum_obj is None:
+		return None
+	return enum_obj.values_by_number[enum_value].name
