@@ -1,52 +1,72 @@
 import * as time from "@buf/compassiot_model.bufbuild_es/compassiot/compass/v1/time_pb"
 import * as streaming from "@buf/compassiot_api.bufbuild_es/compassiot/platform/v1/streaming_pb"
-import { Code, ConnectError } from "@connectrpc/connect"
+import {RawRequestFilter} from "@buf/compassiot_api.bufbuild_es/compassiot/platform/v1/streaming_pb"
+import {Code, ConnectError} from "@connectrpc/connect"
 
-import { createNodeClient } from "./client"
+import {createNodeClient} from "./client"
+import {VehicleType} from "@buf/compassiot_model.bufbuild_es/compassiot/compass/v1/vehicle_pb";
 
 const client = createNodeClient()
 type Client = typeof client
 
 const request = new streaming.ProcessedPointByGeometryRequest({
-  linestringOrPolygonWkt: "POLYGON ((151.116490002445 -34.136652437446564, 150.76133775468065 -33.970878990313345,150.8238645588653 -33.68832143811975, 150.93391173422782 -33.51542003355166, 151.17151359012706 -33.594622738528074, 151.3165757758332 -33.67583417052261, 151.3115736314981 -33.80478175152794, 151.22903824997502 -34.03515466768564, 151.116490002445 -34.136652437446564))",
-  dateTimeRange: new time.DateTimeRange({
-    start: new time.LocalDate({
-      day: 1,
-      month: 10,
-      year: 2023
+    linestringOrPolygonWkt: "LINESTRING(151.18703722810923 -33.8695894847834,151.18361472940623 -33.868689747746664)",
+    dateTimeRange: new time.DateTimeRange({
+        start: new time.LocalDate({
+            day: 1,
+            month: 10,
+            year: 2023
+        }),
+        end: new time.LocalDate({
+            day: 31,
+            month: 10,
+            year: 2023
+        }),
+        hourOfDay: Array.from(Array(24).keys()), // 0 to 23
+        excludeDate: [new time.LocalDate({
+            day: 2,
+            month: 10,
+            year: 2023
+        }),
+            new time.LocalDate({
+                day: 11,
+                month: 10,
+                year: 2023
+            }),
+        ]
     }),
-    end: new time.LocalDate({
-      day: 31,
-      month: 10,
-      year: 2023
-    }),
-    hourOfDay: Array.from(Array(24).keys())  // 0 to 23
-  })
+    // leave empty for no filters
+    filters: [RawRequestFilter.UNSPECIFIED],
+    // leave empty to get all vehicles
+    vehicleTypeFilter: [VehicleType.VEHICLE_TYPE_UNSPECIFIED, VehicleType.BUS, VehicleType.CAR, VehicleType.LCV, VehicleType.HV,
+        VehicleType.VAN, VehicleType.TRUCK, VehicleType.LV, VehicleType.CRANE, VehicleType.TRACTOR, VehicleType.TRAILER,
+        VehicleType.LOADER, VehicleType.MOTORCYCLE, VehicleType.GARBAGE_TRUCK, VehicleType.MICROBUS, VehicleType.SUV, VehicleType.LOADER,
+        VehicleType.PICKUP_TRUCK]
 })
 
 async function* paginateProcessedPoint(client: Client, req: streaming.ProcessedPointByGeometryRequest): AsyncIterable<streaming.ProcessedPoint> {
-  let lastReceivedTimestamp = undefined
-  let iterable = client.processedPointByGeometry({ ...req, lastReceivedTimestamp })
-  for (; ;) {
-    try {
-      for await (const r of iterable) {
-        lastReceivedTimestamp = r.timestamp
-        yield r
-      }
-    } catch (err) {
-      switch (ConnectError.from(err).code) {
-        case Code.DeadlineExceeded:
-          console.log(`DeadlineExceeded, retrying stream`, Date.now().toString())
-          iterable = client.processedPointByGeometry({ ...req, lastReceivedTimestamp })
-          continue
-        default:
-          throw err
-      }
+    let lastReceivedTimestamp = undefined
+    let iterable = client.processedPointByGeometry({...req, lastReceivedTimestamp})
+    for (; ;) {
+        try {
+            for await (const r of iterable) {
+                lastReceivedTimestamp = r.timestamp
+                yield r
+            }
+        } catch (err) {
+            switch (ConnectError.from(err).code) {
+                case Code.DeadlineExceeded:
+                    console.log(`DeadlineExceeded, retrying stream`, Date.now().toString())
+                    iterable = client.processedPointByGeometry({...req, lastReceivedTimestamp})
+                    continue
+                default:
+                    throw err
+            }
+        }
+        break
     }
-    break
-  }
 }
 
 for await (const response of paginateProcessedPoint(client, request)) {
-  console.log(response.toJsonString({ prettySpaces: 2 }))
+    console.log(response.toJsonString({prettySpaces: 2}))
 }
