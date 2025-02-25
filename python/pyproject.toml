@@ -1,0 +1,12 @@
+[project]
+name = "CompassIoT_PythonSDK"
+version = "0.1.0"
+description = "Examples for the CompassIoT Python SDK"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "compassiot-api-grpc-python==1.70.1.1.20250224073702+06d1bf304a30",
+]
+
+[[tool.uv.index]]
+url = "https://buf.build/gen/python"
