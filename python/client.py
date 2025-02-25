@@ -264,12 +264,11 @@ class RoadIntelligenceClient(ServiceStub):
         generator = self.__pickup_stream__(stream, request)
 
         for item in generator:
-            yield item
-            # match item:
-            #     case StreamUtils.Update(value):
-            #         yield value
-            #     case _:
-            #         pass
+            match item:
+                case StreamUtils.Update(value):
+                    yield value
+                case _:
+                    pass
 
     """
     Applies "pickup" logic to a stream in order to prevent the stream from being closed by external measures.
