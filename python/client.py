@@ -22,6 +22,10 @@ from grpc_interceptor.client import ClientCallDetails, ClientInterceptor
 from compassiot.gateway.v1.gateway_pb2 import AuthenticateRequest
 from compassiot.gateway.v1.gateway_pb2_grpc import ServiceStub
 
+# Supply your client secret
+SECRET = "---Your Secret Here---"
+
+
 class UnaryRestInterceptor(grpc.UnaryUnaryClientInterceptor):
     """
     Shim to convert unary gRPC calls to pure REST, due to several suspected regressions in
@@ -115,6 +119,7 @@ class UnaryRestInterceptor(grpc.UnaryUnaryClientInterceptor):
     ):
         return self._call_rest(request, call_details)
 
+
 class AccessTokenInterceptor(ClientInterceptor):
     def __init__(self, host: str, secret: str) -> None:
         self.host = host
@@ -165,6 +170,7 @@ class AccessTokenInterceptor(ClientInterceptor):
                 print("Didn't detect anything, finishing...")
                 raise error
 
+
 class StreamUtils:
     StreamError = str
     InternalMessage = str
@@ -185,10 +191,16 @@ class StreamUtils:
         error: Optional[RpcError]
         pass
 
-type StreamUpdate[T] = Union[StreamUtils.Update[T], StreamUtils.Internal, StreamUtils.Finished]
+
+type StreamUpdate[T] = Union[
+    StreamUtils.Update[T], StreamUtils.Internal, StreamUtils.Finished
+]
+
 
 class RoadIntelligenceClient(ServiceStub):
-    TIMEOUT_MS = 1000 * 60 * 4.5 # 4.5 minutes. 30s below the 5 minute upstream timeout.
+    TIMEOUT_MS = (
+        1000 * 60 * 4.5
+    )  # 4.5 minutes. 30s below the 5 minute upstream timeout.
 
     secret: str
     host: str
@@ -228,25 +240,27 @@ class RoadIntelligenceClient(ServiceStub):
         return method  # Default passthrough
 
     def __method_shims__(self):
-        """ Defines custom wrappers for specific methods. """
+        """Defines custom wrappers for specific methods."""
         return {
             # Pickup
             "ProcessedPointByGeometry": self.__with_pickup__,
-
             # Retry
             "RealtimeRawPointByGeometry": self.__with_retry__,
             "RealtimeTrajectoryByPathRequest": self.__with_retry__,
         }
 
     def __with_pickup__(self, func: grpc.UnaryStreamMultiCallable):
-        """ Example wrapper to pick up a function's output. """
+        """Example wrapper to pick up a function's output."""
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             return self.__masked_pickup__(func, *args, **kwargs)
 
         return wrapper
 
-    def __masked_pickup__[Req, Res](self, stream: grpc.UnaryStreamMultiCallable, request: Req) -> Generator[Res, None]:
+    def __masked_pickup__[Req, Res](
+        self, stream: grpc.UnaryStreamMultiCallable, request: Req
+    ) -> Generator[Res, None]:
         generator = self.__pickup_stream__(stream, request)
 
         for item in generator:
@@ -261,7 +275,10 @@ class RoadIntelligenceClient(ServiceStub):
     Applies "pickup" logic to a stream in order to prevent the stream from being closed by external measures.
     This involves storing the timestamp last returned, and reinitializing the stream with this last timestamp.
     """
-    def __pickup_stream__[Req, Res](self, stream: grpc.UnaryStreamMultiCallable, request: Req) -> Generator[StreamUpdate[Res], None]:
+
+    def __pickup_stream__[Req, Res](
+        self, stream: grpc.UnaryStreamMultiCallable, request: Req
+    ) -> Generator[StreamUpdate[Res], None]:
         # Do not initially provide a "last_received_timestamp"
         generator = stream(request, timeout=RoadIntelligenceClient.TIMEOUT_MS)
 
@@ -286,7 +303,11 @@ class RoadIntelligenceClient(ServiceStub):
                     data_rate = len(timestamps) / window
                     yield StreamUtils.Update(item, data_rate=data_rate, timestamp=now)
             except RpcError as error:
-                refresh_codes = [StatusCode.DEADLINE_EXCEEDED, StatusCode.UNAVAILABLE, StatusCode.INTERNAL]
+                refresh_codes = [
+                    StatusCode.DEADLINE_EXCEEDED,
+                    StatusCode.UNAVAILABLE,
+                    StatusCode.INTERNAL,
+                ]
                 err_code = error.code()
 
                 if err_code in refresh_codes:
@@ -305,14 +326,17 @@ class RoadIntelligenceClient(ServiceStub):
                     break
 
     def __with_retry__(self, func: grpc.UnaryStreamMultiCallable):
-        """ Example wrapper to retry a function on failure. """
+        """Example wrapper to retry a function on failure."""
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             return self.__masked_retry__(func, *args, **kwargs)
 
         return wrapper
 
-    def __masked_retry__[Req, Res](self, stream: grpc.UnaryStreamMultiCallable, request: Req) -> Generator[Res, None]:
+    def __masked_retry__[Req, Res](
+        self, stream: grpc.UnaryStreamMultiCallable, request: Req
+    ) -> Generator[Res, None]:
         generator = self.__retry_stream__(stream, request)
 
         for item in generator:
@@ -326,7 +350,10 @@ class RoadIntelligenceClient(ServiceStub):
     Applies "retry" logic to a stream in order to reconnect to the stream on failure. This does not involve
     checks or balances in terms of applying or tagging requests with metadata, but rather simply reconnects.
     """
-    def __retry_stream__[Req, Res](self, stream: grpc.UnaryStreamMultiCallable, request: Req) -> Generator[StreamUpdate[Res], None]:
+
+    def __retry_stream__[Req, Res](
+        self, stream: grpc.UnaryStreamMultiCallable, request: Req
+    ) -> Generator[StreamUpdate[Res], None]:
         generator = stream(request, timeout=RoadIntelligenceClient.TIMEOUT_MS)
 
         timestamps = deque()
@@ -345,7 +372,11 @@ class RoadIntelligenceClient(ServiceStub):
                     data_rate = len(timestamps) / window
                     yield StreamUtils.Update(item, data_rate=data_rate, timestamp=now)
             except RpcError as error:
-                refresh_codes = [StatusCode.DEADLINE_EXCEEDED, StatusCode.UNAVAILABLE, StatusCode.INTERNAL]
+                refresh_codes = [
+                    StatusCode.DEADLINE_EXCEEDED,
+                    StatusCode.UNAVAILABLE,
+                    StatusCode.INTERNAL,
+                ]
                 err_code = error.code()
 
                 if err_code in refresh_codes:
