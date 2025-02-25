@@ -307,6 +307,7 @@ class RoadIntelligenceClient(ServiceStub):
                     StatusCode.UNAVAILABLE,
                     StatusCode.INTERNAL,
                 ]
+                error.details()
                 err_code = error.code()
 
                 if err_code in refresh_codes:
@@ -371,49 +372,21 @@ class RoadIntelligenceClient(ServiceStub):
                     data_rate = len(timestamps) / window
                     yield StreamUtils.Update(item, data_rate=data_rate, timestamp=now)
             except RpcError as error:
+                force_quit = (
+                    error.details() is not None and error.details() == "gateway error"
+                )
                 refresh_codes = [
                     StatusCode.DEADLINE_EXCEEDED,
                     StatusCode.UNAVAILABLE,
                     StatusCode.INTERNAL,
                 ]
+
                 err_code = error.code()
 
-                if err_code in refresh_codes:
+                if err_code in refresh_codes and not force_quit:
                     # If the server is requesting a restart, or encounters a network error, do so.
                     generator = stream(request)
                     yield StreamUtils.Internal("Reconnecting to stream.", error)
                 else:
                     yield StreamUtils.Finished(error=error)
                     break
-
-
-### Debug Retry Mechanism
-#
-# print("Begining ingestion...")
-# request = native.RealtimeRawPointByVinsRequest(vins=vins, max_staleness_minutes=7)
-#
-# generator = client.RealtimeRawPointByVins(request)
-#
-# for position in generator:
-#     data_rate = 0
-#     formatted_time = "Now"
-#
-#     print(position)
-#
-#     match position:
-#         case StreamUtils.Update(_, data_rate=dr, timestamp=t):
-#             formatted_time = datetime.fromtimestamp(t).strftime("%H:%M:%S")
-#             data_rate=dr
-#         case StreamUtils.Internal(message, error):
-#             print(f"\nReceived internal update: {message}\n", error)
-#         case StreamUtils.Finished(error):
-#             if error is not None:
-#                 print(f"\nStream finished with error: {error}", error.trailing_metadata())
-#             else:
-#                 print("\nStream finished successfully.\n")
-#
-#     # Print progress dynamically (overwriting the same line)
-#     sys.stdout.write(f"\rData Rate: {data_rate:.2f} points/sec. Time: {formatted_time}")
-#     sys.stdout.flush()
-#
-# print("\nDone.")
