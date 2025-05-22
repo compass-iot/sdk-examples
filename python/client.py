@@ -15,6 +15,7 @@ from compassiot.gateway.v1.gateway_pb2_grpc import ServiceStub
 HOST = "api.compassiot.cloud"
 SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
 TIMEOUT_SEC = 60 * 25  # used by retryStream
+SHORT_TIMEOUT_SEC = 60 * 5
 
 
 def create_gateway_client() -> ServiceStub:
