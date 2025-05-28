@@ -4,6 +4,7 @@ bufbuild-protovalidate-grpc-python==1.68.0.1.20241127180247+a33202765966
 bufbuild-protovalidate-protocolbuffers-pyi==28.3.0.2.20241127180247+a33202765966
 bufbuild-protovalidate-protocolbuffers-python==28.3.0.2.20241127180247+a33202765966
 certifi==2024.8.30
+requests==2.32.3
 charset-normalizer==3.4.0
 compassiot-api-community-nipunn1313-mypy==3.6.0.1.dev0+cabb2b739966
 compassiot-api-community-nipunn1313-mypy-grpc==3.6.0.1.dev0+cabb2b739966
