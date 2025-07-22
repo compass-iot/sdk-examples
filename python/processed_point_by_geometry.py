@@ -7,7 +7,6 @@ import compassiot.compass.v1.vehicle_pb2 as vehicle
 
 def main():
     client = RoadIntelligenceClient(SECRET)
-
     request = streaming.ProcessedPointByGeometryRequest(
         linestring_or_polygon_wkt="LINESTRING(151.18703722810923 -33.8695894847834,151.18361472940623 -33.868689747746664)",
         date_time_range=time.DateTimeRange(

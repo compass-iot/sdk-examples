@@ -5,7 +5,8 @@ description = "Examples for the CompassIoT Python SDK"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "compassiot-api-grpc-python==1.70.1.1.20250224073702+06d1bf304a30",
+    "compassiot-api-grpc-python==1.73.1.1.dev0+a6a866f52e32",
+    "compassiot-model-grpc-python==1.73.1.1.dev0+45acb67e4e56",
     "grpc-interceptor>=0.15.4",
     "requests>=2.32.3",
 ]

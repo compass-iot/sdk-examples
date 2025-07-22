@@ -1,30 +1,58 @@
 # Python Examples
 
-## Quickstart
+### Requirements
 
-To begin, you must first assign your API key to the `SECRET` variable in `client.py`, line `26`.
+You'll need:
 
-You may begin by running any of the caller functions.
-For example, to call the [`IntersectionAnalysis`](https://api.compassiot.cloud/docs/gateway/IntersectionAnalysis) rpc, you may use the following example:
+1. `pip` or `uv`
+
+Checkout the `uv` installation guide [here](https://docs.astral.sh/uv/#installation).
+Or, alternatively use the `pip` installation guide [here](https://pip.pypa.io/en/stable/installation/) if not already bundled.
+
+2. Python 3.12 or newer (Check using `python3 --version`)
+
+You can install or update python from the following guide [here](https://www.datacamp.com/tutorial/pip-upgrade-python).
+Please note, this will occur automatically if you use `uv`.
+
+3. To install the depdencies
+
+If you're using `uv`, run the following command:
 
 ```bash
-uv run intersection_analysis.py
+uv pip install --requirements requirements.txt
+```
+
+However, if you're using `pip`, run the following command:
+
+```bash
+pip install -r requirements.txt --extra-index-url https://buf.build/gen/python
+```
+
+### Example Script
+
+#### Assigning your API Key
+
+To begin, you must first assign your API key to the `SECRET` variable in `client.py`, line `26`.
+Once you have met all the requirements below, go to the "Example Script" section to see the SDK in action.
+
+You may begin by running any of the caller functions.
+
+#### Making an API call
+
+Let's call the [`AggregateByPath`](https://api.compassiot.cloud/docs/gateway/AggregateByPath) RPC. We can do so using the example provided in `aggregate_by_path.py`, and running it using the following command based on the package manager we selected earlier.
+
+```bash
+# Using UV
+uv run aggregate_by_path.py
+
+# Using PIP
+python3 aggregate_by_path.py
 ```
 
 > Please find our API documentation [here](https://api.compassiot.cloud/docs).
 > The protobuf files for our APIs, can be found [here](https://buf.build/compassiot/api).
 
 ## FAQs
-
-### How do I install `uv`
-
-Checkout the `uv` installation guide [here](https://docs.astral.sh/uv/#installation).
-This is not required, you can instead use `pip`, but this is first-party supported.
-To install using pip, you can use the following command:
-
-```bash
-pip install -r requirements.txt --extra-index-url https://buf.build/gen/python
-```
 
 ### What is Unary, what is Streaming?
 

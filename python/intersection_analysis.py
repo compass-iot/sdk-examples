@@ -7,7 +7,6 @@ import compassiot.platform.v1.unary_pb2 as unary
 
 def main():
     client = RoadIntelligenceClient(SECRET)
-
     request = unary.IntersectionRequest(
         intersection_center=geo.LatLng(lat=-33.87973611766243, lng=151.2091378332539),
         intersection_radius=26,
@@ -20,7 +19,6 @@ def main():
     )
 
     response = client.IntersectionAnalysis(request)
-
     print(response)
 
 

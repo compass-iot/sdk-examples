@@ -136,8 +136,14 @@ class AccessTokenInterceptor(ClientInterceptor):
             secure_channel(host, ssl_channel_credentials()), *interceptors
         ) as channel:
             service = ServiceStub(channel)
-            response = service.Authenticate(AuthenticateRequest(token=secret))
-            return response.access_token
+
+            try:
+                response = service.Authenticate(AuthenticateRequest(token=secret))
+                return response.access_token
+            except Exception as e:
+                raise Exception(
+                    "Failed to authenticate, did you set the secret?"
+                ) from e
 
     def __call_details(
         self, call_details: grpc.ClientCallDetails
@@ -207,9 +213,13 @@ class RoadIntelligenceClient(ServiceStub):
     client: ServiceStub
 
     def __init__(self, secret: str, host="api.compassiot.cloud"):
-        self.secret = secret
-        self.host = host
-        self.client = self.__create_stub()
+        try:
+            self.secret = secret
+            self.host = host
+            self.client = self.__create_stub()
+        except Exception as e:
+            print(e)
+            exit(1)
 
     def __create_stub(self):
         assert self.host is not None
@@ -337,12 +347,17 @@ class RoadIntelligenceClient(ServiceStub):
     def __masked_retry__[Req, Res](
         self, stream: grpc.UnaryStreamMultiCallable, request: Req
     ) -> Generator[Res, None]:
+        print("Starting Stream...")
         generator = self.__retry_stream__(stream, request)
 
         for item in generator:
             match item:
                 case StreamUtils.Update(value):
                     yield value
+                case StreamUtils.Finished(error):
+                    exception = UnexpectedStreamTerminationException("Failed to query streaming endpoint") 
+                    exception.__traceback__ = None
+                    raise exception from error
                 case _:
                     pass
 
@@ -387,6 +402,15 @@ class RoadIntelligenceClient(ServiceStub):
                     # If the server is requesting a restart, or encounters a network error, do so.
                     generator = stream(request)
                     yield StreamUtils.Internal("Reconnecting to stream.", error)
+                if err_code in [StatusCode.INVALID_ARGUMENT]:
+                    exception = MalformedRequestException(f"Malformed request object: {error.details()}")
+                    exception.__traceback__ = None
+                    yield StreamUtils.Finished(error=exception)
                 else:
                     yield StreamUtils.Finished(error=error)
                     break
+
+## Exceptions
+
+class UnexpectedStreamTerminationException(Exception): ...
+class MalformedRequestException(Exception): ...

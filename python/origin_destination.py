@@ -3,10 +3,8 @@ from client import RoadIntelligenceClient, SECRET
 import compassiot.compass.v1.time_pb2 as time
 import compassiot.platform.v1.unary_pb2 as unary
 
-
 def main():
     client = RoadIntelligenceClient(SECRET)
-
     request = unary.OriginDestinationRequest(
         selection=[
             unary.Selection(
@@ -29,7 +27,6 @@ def main():
     )
 
     response = client.OriginDestination(request)
-
     print(response)
 
 

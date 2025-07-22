@@ -4,38 +4,38 @@ requires-python = ">=3.13"
 
 [[package]]
 name = "bufbuild-protovalidate-grpc-python"
-version = "1.70.1.1.20250219170025+d39267d9df8f"
+version = "1.73.1.1.20250717185734+6c6e0d3c608e"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-protocolbuffers-python" },
     { name = "grpcio" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/bufbuild-protovalidate-grpc-python/bufbuild_protovalidate_grpc_python-1.70.1.1.20250219170025+d39267d9df8f-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/bufbuild-protovalidate-grpc-python/bufbuild_protovalidate_grpc_python-1.73.1.1.20250717185734+6c6e0d3c608e-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "bufbuild-protovalidate-protocolbuffers-pyi"
-version = "29.3.0.1.20250219170025+d39267d9df8f"
+version = "31.1.0.1.20250717185734+6c6e0d3c608e"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "protobuf" },
     { name = "types-protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/bufbuild-protovalidate-protocolbuffers-pyi/bufbuild_protovalidate_protocolbuffers_pyi-29.3.0.1.20250219170025+d39267d9df8f-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/bufbuild-protovalidate-protocolbuffers-pyi/bufbuild_protovalidate_protocolbuffers_pyi-31.1.0.1.20250717185734+6c6e0d3c608e-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "bufbuild-protovalidate-protocolbuffers-python"
-version = "29.3.0.1.20250219170025+d39267d9df8f"
+version = "31.1.0.1.20250717185734+6c6e0d3c608e"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-protocolbuffers-pyi" },
     { name = "protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/bufbuild-protovalidate-protocolbuffers-python/bufbuild_protovalidate_protocolbuffers_python-29.3.0.1.20250219170025+d39267d9df8f-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/bufbuild-protovalidate-protocolbuffers-python/bufbuild_protovalidate_protocolbuffers_python-31.1.0.1.20250717185734+6c6e0d3c608e-py3-none-any.whl" },
 ]
 
 [[package]]
@@ -71,86 +71,92 @@ wheels = [
 
 [[package]]
 name = "compassiot-api-grpc-python"
-version = "1.70.1.1.20250224073702+06d1bf304a30"
+version = "1.73.1.1.dev0+a6a866f52e32"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-grpc-python" },
     { name = "compassiot-api-protocolbuffers-python" },
     { name = "compassiot-model-grpc-python" },
     { name = "googleapis-googleapis-grpc-python" },
+    { name = "googlecloudplatform-bq-schema-api-grpc-python" },
     { name = "grpcio" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/compassiot-api-grpc-python/compassiot_api_grpc_python-1.70.1.1.20250224073702+06d1bf304a30-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/compassiot-api-grpc-python/compassiot_api_grpc_python-1.73.1.1.dev+a6a866f52e32-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "compassiot-api-protocolbuffers-pyi"
-version = "29.3.0.1.20250224073702+06d1bf304a30"
+version = "31.1.0.1.20250722004719+cc7185903681"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-protocolbuffers-pyi" },
     { name = "compassiot-model-protocolbuffers-pyi" },
     { name = "googleapis-googleapis-protocolbuffers-pyi" },
+    { name = "googlecloudplatform-bq-schema-api-protocolbuffers-pyi" },
     { name = "protobuf" },
     { name = "types-protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/compassiot-api-protocolbuffers-pyi/compassiot_api_protocolbuffers_pyi-29.3.0.1.20250224073702+06d1bf304a30-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/compassiot-api-protocolbuffers-pyi/compassiot_api_protocolbuffers_pyi-31.1.0.1.20250722004719+cc7185903681-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "compassiot-api-protocolbuffers-python"
-version = "29.3.0.1.20250224073702+06d1bf304a30"
+version = "31.1.0.1.20250722004719+cc7185903681"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-protocolbuffers-python" },
     { name = "compassiot-api-protocolbuffers-pyi" },
     { name = "compassiot-model-protocolbuffers-python" },
     { name = "googleapis-googleapis-protocolbuffers-python" },
+    { name = "googlecloudplatform-bq-schema-api-protocolbuffers-python" },
     { name = "protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/compassiot-api-protocolbuffers-python/compassiot_api_protocolbuffers_python-29.3.0.1.20250224073702+06d1bf304a30-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/compassiot-api-protocolbuffers-python/compassiot_api_protocolbuffers_python-31.1.0.1.20250722004719+cc7185903681-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "compassiot-model-grpc-python"
-version = "1.70.1.1.20250224073702+158af69cb3f0"
+version = "1.73.1.1.dev0+45acb67e4e56"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-grpc-python" },
     { name = "compassiot-model-protocolbuffers-python" },
+    { name = "googlecloudplatform-bq-schema-api-grpc-python" },
     { name = "grpcio" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/compassiot-model-grpc-python/compassiot_model_grpc_python-1.70.1.1.20250224073702+158af69cb3f0-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/compassiot-model-grpc-python/compassiot_model_grpc_python-1.73.1.1.dev+45acb67e4e56-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "compassiot-model-protocolbuffers-pyi"
-version = "29.3.0.1.20250224073702+158af69cb3f0"
+version = "31.1.0.1.20250722004719+1bf887fbbe20"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-protocolbuffers-pyi" },
+    { name = "googlecloudplatform-bq-schema-api-protocolbuffers-pyi" },
     { name = "protobuf" },
     { name = "types-protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/compassiot-model-protocolbuffers-pyi/compassiot_model_protocolbuffers_pyi-29.3.0.1.20250224073702+158af69cb3f0-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/compassiot-model-protocolbuffers-pyi/compassiot_model_protocolbuffers_pyi-31.1.0.1.20250722004719+1bf887fbbe20-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "compassiot-model-protocolbuffers-python"
-version = "29.3.0.1.20250224073702+158af69cb3f0"
+version = "31.1.0.1.20250722004719+1bf887fbbe20"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "bufbuild-protovalidate-protocolbuffers-python" },
     { name = "compassiot-model-protocolbuffers-pyi" },
+    { name = "googlecloudplatform-bq-schema-api-protocolbuffers-python" },
     { name = "protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/compassiot-model-protocolbuffers-python/compassiot_model_protocolbuffers_python-29.3.0.1.20250224073702+158af69cb3f0-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/compassiot-model-protocolbuffers-python/compassiot_model_protocolbuffers_python-31.1.0.1.20250722004719+1bf887fbbe20-py3-none-any.whl" },
 ]
 
 [[package]]
@@ -159,51 +165,89 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "compassiot-api-grpc-python" },
+    { name = "compassiot-model-grpc-python" },
     { name = "grpc-interceptor" },
     { name = "requests" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "compassiot-api-grpc-python", specifier = "==1.70.1.1.20250224073702+06d1bf304a30" },
+    { name = "compassiot-api-grpc-python", specifier = "==1.73.1.1.dev0+a6a866f52e32" },
+    { name = "compassiot-model-grpc-python", specifier = "==1.73.1.1.dev0+45acb67e4e56" },
     { name = "grpc-interceptor", specifier = ">=0.15.4" },
     { name = "requests", specifier = ">=2.32.3" },
 ]
 
 [[package]]
 name = "googleapis-googleapis-grpc-python"
-version = "1.70.1.1.20250211200939+546238c53f73"
+version = "1.73.1.1.20250411203938+61b203b9a916"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "googleapis-googleapis-protocolbuffers-python" },
     { name = "grpcio" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/googleapis-googleapis-grpc-python/googleapis_googleapis_grpc_python-1.70.1.1.20250211200939+546238c53f73-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/googleapis-googleapis-grpc-python/googleapis_googleapis_grpc_python-1.73.1.1.20250411203938+61b203b9a916-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "googleapis-googleapis-protocolbuffers-pyi"
-version = "29.3.0.1.20250211200939+546238c53f73"
+version = "31.1.0.1.20250411203938+61b203b9a916"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "protobuf" },
     { name = "types-protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/googleapis-googleapis-protocolbuffers-pyi/googleapis_googleapis_protocolbuffers_pyi-29.3.0.1.20250211200939+546238c53f73-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/googleapis-googleapis-protocolbuffers-pyi/googleapis_googleapis_protocolbuffers_pyi-31.1.0.1.20250411203938+61b203b9a916-py3-none-any.whl" },
 ]
 
 [[package]]
 name = "googleapis-googleapis-protocolbuffers-python"
-version = "29.3.0.1.20250211200939+546238c53f73"
+version = "31.1.0.1.20250411203938+61b203b9a916"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
     { name = "googleapis-googleapis-protocolbuffers-pyi" },
     { name = "protobuf" },
 ]
 wheels = [
-    { url = "https://buf.build/gen/python/googleapis-googleapis-protocolbuffers-python/googleapis_googleapis_protocolbuffers_python-29.3.0.1.20250211200939+546238c53f73-py3-none-any.whl" },
+    { url = "https://buf.build/gen/python/googleapis-googleapis-protocolbuffers-python/googleapis_googleapis_protocolbuffers_python-31.1.0.1.20250411203938+61b203b9a916-py3-none-any.whl" },
+]
+
+[[package]]
+name = "googlecloudplatform-bq-schema-api-grpc-python"
+version = "1.73.1.1.20241126165326+21c7b1fb5fe8"
+source = { registry = "https://buf.build/gen/python" }
+dependencies = [
+    { name = "googlecloudplatform-bq-schema-api-protocolbuffers-python" },
+    { name = "grpcio" },
+]
+wheels = [
+    { url = "https://buf.build/gen/python/googlecloudplatform-bq-schema-api-grpc-python/googlecloudplatform_bq_schema_api_grpc_python-1.73.1.1.20241126165326+21c7b1fb5fe8-py3-none-any.whl" },
+]
+
+[[package]]
+name = "googlecloudplatform-bq-schema-api-protocolbuffers-pyi"
+version = "31.1.0.1.20241126165326+21c7b1fb5fe8"
+source = { registry = "https://buf.build/gen/python" }
+dependencies = [
+    { name = "protobuf" },
+    { name = "types-protobuf" },
+]
+wheels = [
+    { url = "https://buf.build/gen/python/googlecloudplatform-bq-schema-api-protocolbuffers-pyi/googlecloudplatform_bq_schema_api_protocolbuffers_pyi-31.1.0.1.20241126165326+21c7b1fb5fe8-py3-none-any.whl" },
+]
+
+[[package]]
+name = "googlecloudplatform-bq-schema-api-protocolbuffers-python"
+version = "31.1.0.1.20241126165326+21c7b1fb5fe8"
+source = { registry = "https://buf.build/gen/python" }
+dependencies = [
+    { name = "googlecloudplatform-bq-schema-api-protocolbuffers-pyi" },
+    { name = "protobuf" },
+]
+wheels = [
+    { url = "https://buf.build/gen/python/googlecloudplatform-bq-schema-api-protocolbuffers-python/googlecloudplatform_bq_schema_api_protocolbuffers_python-31.1.0.1.20241126165326+21c7b1fb5fe8-py3-none-any.whl" },
 ]
 
 [[package]]
@@ -246,16 +290,16 @@ wheels = [
 
 [[package]]
 name = "protobuf"
-version = "5.29.3"
+version = "6.31.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f7/d1/e0a911544ca9993e0f17ce6d3cc0932752356c1b0a834397f28e63479344/protobuf-5.29.3.tar.gz", hash = "sha256:5da0f41edaf117bde316404bad1a486cb4ededf8e4a54891296f648e8e076620", size = 424945 }
+sdist = { url = "https://files.pythonhosted.org/packages/52/f3/b9655a711b32c19720253f6f06326faf90580834e2e83f840472d752bc8b/protobuf-6.31.1.tar.gz", hash = "sha256:d8cac4c982f0b957a4dc73a80e2ea24fab08e679c0de9deb835f4a12d69aca9a", size = 441797 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dc/7a/1e38f3cafa022f477ca0f57a1f49962f21ad25850c3ca0acd3b9d0091518/protobuf-5.29.3-cp310-abi3-win32.whl", hash = "sha256:3ea51771449e1035f26069c4c7fd51fba990d07bc55ba80701c78f886bf9c888", size = 422708 },
-    { url = "https://files.pythonhosted.org/packages/61/fa/aae8e10512b83de633f2646506a6d835b151edf4b30d18d73afd01447253/protobuf-5.29.3-cp310-abi3-win_amd64.whl", hash = "sha256:a4fa6f80816a9a0678429e84973f2f98cbc218cca434abe8db2ad0bffc98503a", size = 434508 },
-    { url = "https://files.pythonhosted.org/packages/dd/04/3eaedc2ba17a088961d0e3bd396eac764450f431621b58a04ce898acd126/protobuf-5.29.3-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:a8434404bbf139aa9e1300dbf989667a83d42ddda9153d8ab76e0d5dcaca484e", size = 417825 },
-    { url = "https://files.pythonhosted.org/packages/4f/06/7c467744d23c3979ce250397e26d8ad8eeb2bea7b18ca12ad58313c1b8d5/protobuf-5.29.3-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:daaf63f70f25e8689c072cfad4334ca0ac1d1e05a92fc15c54eb9cf23c3efd84", size = 319573 },
-    { url = "https://files.pythonhosted.org/packages/a8/45/2ebbde52ad2be18d3675b6bee50e68cd73c9e0654de77d595540b5129df8/protobuf-5.29.3-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:c027e08a08be10b67c06bf2370b99c811c466398c357e615ca88c91c07f0910f", size = 319672 },
-    { url = "https://files.pythonhosted.org/packages/fd/b2/ab07b09e0f6d143dfb839693aa05765257bceaa13d03bf1a696b78323e7a/protobuf-5.29.3-py3-none-any.whl", hash = "sha256:0a18ed4a24198528f2333802eb075e59dea9d679ab7a6c5efb017a59004d849f", size = 172550 },
+    { url = "https://files.pythonhosted.org/packages/f3/6f/6ab8e4bf962fd5570d3deaa2d5c38f0a363f57b4501047b5ebeb83ab1125/protobuf-6.31.1-cp310-abi3-win32.whl", hash = "sha256:7fa17d5a29c2e04b7d90e5e32388b8bfd0e7107cd8e616feef7ed3fa6bdab5c9", size = 423603 },
+    { url = "https://files.pythonhosted.org/packages/44/3a/b15c4347dd4bf3a1b0ee882f384623e2063bb5cf9fa9d57990a4f7df2fb6/protobuf-6.31.1-cp310-abi3-win_amd64.whl", hash = "sha256:426f59d2964864a1a366254fa703b8632dcec0790d8862d30034d8245e1cd447", size = 435283 },
+    { url = "https://files.pythonhosted.org/packages/6a/c9/b9689a2a250264a84e66c46d8862ba788ee7a641cdca39bccf64f59284b7/protobuf-6.31.1-cp39-abi3-macosx_10_9_universal2.whl", hash = "sha256:6f1227473dc43d44ed644425268eb7c2e488ae245d51c6866d19fe158e207402", size = 425604 },
+    { url = "https://files.pythonhosted.org/packages/76/a1/7a5a94032c83375e4fe7e7f56e3976ea6ac90c5e85fac8576409e25c39c3/protobuf-6.31.1-cp39-abi3-manylinux2014_aarch64.whl", hash = "sha256:a40fc12b84c154884d7d4c4ebd675d5b3b5283e155f324049ae396b95ddebc39", size = 322115 },
+    { url = "https://files.pythonhosted.org/packages/fa/b1/b59d405d64d31999244643d88c45c8241c58f17cc887e73bcb90602327f8/protobuf-6.31.1-cp39-abi3-manylinux2014_x86_64.whl", hash = "sha256:4ee898bf66f7a8b0bd21bce523814e6fbd8c6add948045ce958b73af7e8878c6", size = 321070 },
+    { url = "https://files.pythonhosted.org/packages/f7/af/ab3c51ab7507a7325e98ffe691d9495ee3d3aa5f589afad65ec920d39821/protobuf-6.31.1-py3-none-any.whl", hash = "sha256:720a6c7e6b77288b85063569baae8536671b39f15cc22037ec7045658d80489e", size = 168724 },
 ]
 
 [[package]]
@@ -275,11 +319,11 @@ wheels = [
 
 [[package]]
 name = "types-protobuf"
-version = "5.29.1.20250208"
+version = "6.30.2.20250703"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ff/75/8effaebae86ae9e489d4d453b30c6da728e8a9267a261418d476c5c2fbe6/types_protobuf-5.29.1.20250208.tar.gz", hash = "sha256:c1acd6a59ab554dbe09b5d1fa7dd701e2fcfb2212937a3af1c03b736060b792a", size = 59330 }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/54/d63ce1eee8e93c4d710bbe2c663ec68e3672cf4f2fca26eecd20981c0c5d/types_protobuf-6.30.2.20250703.tar.gz", hash = "sha256:609a974754bbb71fa178fc641f51050395e8e1849f49d0420a6281ed8d1ddf46", size = 62300 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/96/e9/095c36efdc9dbb1df75ce42f37c0de6a6879aad937a08f0b97942b7c5968/types_protobuf-5.29.1.20250208-py3-none-any.whl", hash = "sha256:c5f8bfb4afdc1b5cbca1848f2c8b361a2090add7401f410b22b599ef647bf483", size = 73925 },
+    { url = "https://files.pythonhosted.org/packages/7e/2b/5d0377c3d6e0f49d4847ad2c40629593fee4a5c9ec56eba26a15c708fbc0/types_protobuf-6.30.2.20250703-py3-none-any.whl", hash = "sha256:fa5aff9036e9ef432d703abbdd801b436a249b6802e4df5ef74513e272434e57", size = 76489 },
 ]
 
 [[package]]
