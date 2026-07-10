@@ -17,15 +17,22 @@ SECRET = "__INSERT_YOUR_COMPASSIOT_API_KEY__"
 TIMEOUT_SEC = 60 * 25  # used by retryStream
 SHORT_TIMEOUT_SEC = 60 * 5
 
+KEEPALIVE_CHANNEL_OPTIONS = [
+	("grpc.keepalive_time_ms", 60_000),
+	("grpc.keepalive_timeout_ms", 20_000),
+	("grpc.keepalive_permit_without_calls", 1),
+	("grpc.http2.max_pings_without_data", 0),
+]
+
 
 def create_gateway_client() -> ServiceStub:
 	# UnaryRestInterceptor must be last as it's the layer which makes the API call,
 	# unlike AccessTokenInterceptor which just populates the header
 	interceptors = [
-		AccessTokenInterceptor(HOST, SECRET), 
+		AccessTokenInterceptor(HOST, SECRET),
 		UnaryRestInterceptor(HOST)
 	]
-	channel = secure_channel(HOST, ssl_channel_credentials())
+	channel = secure_channel(HOST, ssl_channel_credentials(), options=KEEPALIVE_CHANNEL_OPTIONS)
 	channel = intercept_channel(channel, *interceptors)
 	return ServiceStub(channel)
 
@@ -152,13 +159,30 @@ class AccessTokenInterceptor(ClientInterceptor):
 
 
 def retry_stream(stream: Callable[[None], AsyncGenerator]) -> AsyncGenerator:
+	"""
+	Keeps a server-streaming RPC alive indefinitely.
+
+	Streams are opened with a deadline (e.g. SHORT_TIMEOUT_SEC), so
+	DEADLINE_EXCEEDED is the normal end-of-cycle signal and the stream is simply
+	reopened. Reopening on the same channel is safe after a network failure
+	because KEEPALIVE_CHANNEL_OPTIONS make the transport detect a dead
+	connection and reconnect on its own.
+	"""
 	generator = stream()
 	while True:
+		received_any = False
 		try:
-			yield from generator
+			for response in generator:
+				received_any = True
+				yield response
+			# Server ended the stream cleanly — reopen it.
+			generator = stream()
 		except RpcError as error:
 			if error.code() is grpc.StatusCode.DEADLINE_EXCEEDED:
-					print("DeadlineExceeded, retrying stream")
+					if received_any:
+						print("DeadlineExceeded, retrying stream")
+					else:
+						print("DeadlineExceeded with no data received, retrying stream")
 					generator = stream()
 					continue
 			else:
