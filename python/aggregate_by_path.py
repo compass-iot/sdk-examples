@@ -38,17 +38,17 @@ def main():
 
     response = client.AggregateByPath(request)
 
-    # Uncomment to print the full response
-    # print(response)
+    print(response)
 
-    for i, aggregate in enumerate(response.aggregate):
-        print("Aggregate %d speed distribution:" % i)
-        for bin in aggregate.total.speed_distribution:
-            print("  %.0f-%.0f mph: %.1f%% of trips" % (
-                bin.range_start / KMH_PER_MPH,
-                bin.range_end / KMH_PER_MPH,
-                bin.trip_count_total_percentile
-            ))
+    ## To view speed distribution bins
+    # for i, aggregate in enumerate(response.aggregate):
+    #     print("Aggregate %d speed distribution:" % i)
+    #     for bin in aggregate.total.speed_distribution:
+    #         print("  %.0f-%.0f mph: %.1f%% of trips" % (
+    #             bin.range_start / KMH_PER_MPH,
+    #             bin.range_end / KMH_PER_MPH,
+    #             bin.trip_count_total_percentile
+    #         ))
 
 
 if __name__ == "__main__":

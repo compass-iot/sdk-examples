@@ -36,14 +36,14 @@ const request = new unary.AggregateByPathRequest({
 
 const response = await client.aggregateByPath(request)
 
-// Uncomment to print the full response
-// console.log(response.toJsonString({ prettySpaces: 2 }))
+console.log(response.toJsonString({ prettySpaces: 2 }))
 
-response.aggregate.forEach((aggregate, i) => {
-  console.log(`Aggregate ${i} speed distribution:`)
-  for (const bin of aggregate.total?.speedDistribution ?? []) {
-    const from = (bin.rangeStart / KMH_PER_MPH).toFixed(0)
-    const to = (bin.rangeEnd / KMH_PER_MPH).toFixed(0)
-    console.log(`  ${from}-${to} mph: ${bin.tripCountTotalPercentile.toFixed(1)}% of trips`)
-  }
-})
+// // To view speed distribution bins
+// response.aggregate.forEach((aggregate, i) => {
+//   console.log(`Aggregate ${i} speed distribution:`)
+//   for (const bin of aggregate.total?.speedDistribution ?? []) {
+//     const from = (bin.rangeStart / KMH_PER_MPH).toFixed(0)
+//     const to = (bin.rangeEnd / KMH_PER_MPH).toFixed(0)
+//     console.log(`  ${from}-${to} mph: ${bin.tripCountTotalPercentile.toFixed(1)}% of trips`)
+//   }
+// })
