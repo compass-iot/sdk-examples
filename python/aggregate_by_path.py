@@ -38,7 +38,8 @@ def main():
 
     response = client.AggregateByPath(request)
 
-    print(response)
+    # Uncomment to print the full response
+    # print(response)
 
     for i, aggregate in enumerate(response.aggregate):
         print("Aggregate %d speed distribution:" % i)

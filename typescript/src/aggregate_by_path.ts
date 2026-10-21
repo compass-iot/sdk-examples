@@ -36,7 +36,8 @@ const request = new unary.AggregateByPathRequest({
 
 const response = await client.aggregateByPath(request)
 
-console.log(response.toJsonString({ prettySpaces: 2 }))
+// Uncomment to print the full response
+// console.log(response.toJsonString({ prettySpaces: 2 }))
 
 response.aggregate.forEach((aggregate, i) => {
   console.log(`Aggregate ${i} speed distribution:`)
