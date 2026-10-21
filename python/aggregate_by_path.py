@@ -1,6 +1,10 @@
 from client import create_gateway_client
 import compassiot.compass.v1.time_pb2 as time
 import compassiot.platform.v1.unary_pb2 as unary
+import compassiot.platform.v2.unary_pb2 as unary_v2
+
+# Speeds in requests and responses are always km/h
+KMH_PER_MPH = 1.609344
 
 
 def main():
@@ -24,12 +28,26 @@ def main():
 			    time.DayOfWeek.SUNDAY
             ],
             hour_of_day=[i for i in range(24)]  # 0 to 23
+        ),
+        speed_distribution=unary_v2.StatDistributionRequest(
+            range_start=0,
+            range_end=75 * KMH_PER_MPH,
+            step_size=5 * KMH_PER_MPH
         )
     )
 
     response = client.AggregateByPath(request)
 
     print(response)
+
+    for i, aggregate in enumerate(response.aggregate):
+        print("Aggregate %d speed distribution:" % i)
+        for bin in aggregate.total.speed_distribution:
+            print("  %.0f-%.0f mph: %.1f%% of trips" % (
+                bin.range_start / KMH_PER_MPH,
+                bin.range_end / KMH_PER_MPH,
+                bin.trip_count_total_percentile
+            ))
 
 
 if __name__ == "__main__":

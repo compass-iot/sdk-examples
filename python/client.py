@@ -1,5 +1,5 @@
-import asyncio
 import inspect
+from concurrent.futures import Future
 import requests
 from typing import Any
 from collections.abc import AsyncGenerator, Callable
@@ -37,6 +37,16 @@ def create_gateway_client() -> ServiceStub:
 	return ServiceStub(channel)
 
 
+class RestRpcError(RpcError):
+	"""
+	gRPC's interceptor chain returns RpcErrors instead of raising them and then calls
+	.result() on whatever it gets back, so the error has to behave like a failed call.
+	"""
+
+	def result(self, timeout=None):
+		raise self
+
+
 class UnaryRestInterceptor(grpc.UnaryUnaryClientInterceptor):
 	"""
 	Shim to convert unary gRPC calls to pure REST, due to several suspected regressions in
@@ -60,7 +70,7 @@ class UnaryRestInterceptor(grpc.UnaryUnaryClientInterceptor):
 	@staticmethod
 	def _cast_grpc_error(response: requests.Response):
 		has_error = False
-		error = RpcError()
+		error = RestRpcError()
 		if response.status_code >= 200 and response.status_code < 300:
 			has_error = False
 		if response.status_code == 400:
@@ -105,7 +115,7 @@ class UnaryRestInterceptor(grpc.UnaryUnaryClientInterceptor):
 				headers[k] = v
 
 		# Create future
-		future = asyncio.get_event_loop().create_future()
+		future = Future()
 
 		# Make request & deserialize it
 		response = requests.post(url, data=request.SerializeToString(True), headers=headers)
@@ -148,14 +158,11 @@ class AccessTokenInterceptor(ClientInterceptor):
 		)
 	
 	def intercept(self, method: Callable[..., Any], request_or_iterator: Any, call_details: ClientCallDetails):
-		try:
-			return method(request_or_iterator, self._create_details_with_auth(call_details, self.access_token))
-		except RpcError as error:
-			if error.code == grpc.StatusCode.UNAUTHENTICATED:
-				self.access_token = self._get_access_token(self.host, self.secret)
-				return method(request_or_iterator, self._create_details_with_auth(call_details, self.access_token))
-			else:
-				raise error
+		response = method(request_or_iterator, self._create_details_with_auth(call_details, self.access_token))
+		if isinstance(response, RestRpcError) and response.code() == grpc.StatusCode.UNAUTHENTICATED:
+			self.access_token = self._get_access_token(self.host, self.secret)
+			response = method(request_or_iterator, self._create_details_with_auth(call_details, self.access_token))
+		return response
 
 
 def retry_stream(stream: Callable[[None], AsyncGenerator]) -> AsyncGenerator:
